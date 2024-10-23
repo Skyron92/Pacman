@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class State : MonoBehaviour
+public abstract class State
 {
     Ghost _owner;
     protected Ghost Owner => _owner;
@@ -16,10 +16,15 @@ public abstract class State : MonoBehaviour
     public abstract void TryChangeState();
 }
 
-public class Wait : State{
+public class Wait : State {
+
+    private float _duration;
+    private float _timer;
     
-    public Wait(Ghost ghost) : base(ghost) {
+    public Wait(Ghost ghost, float duration) : base(ghost) {
         Destination = Owner.startPointA.position;
+        _duration = duration;
+        _timer = 0;
     }
 
     public override void DoAction() {
@@ -27,6 +32,11 @@ public class Wait : State{
     }
 
     public override void CheckDestination() {
+        _timer += Time.deltaTime;
+        if (_timer >= _duration) {
+            TryChangeState();
+            return;
+        }
         if(HasReachedDestination) {
             if(Destination == Owner.startPointA.position) {
                 Destination = Owner.startPointB.position;
@@ -34,6 +44,21 @@ public class Wait : State{
             else Destination = Owner.startPointA.position; 
             DoAction();
         }
+    }
+
+    public override void TryChangeState() {
+        Owner.ChangeState(new Hunt(Owner));
+    }
+}
+
+public class Hunt : State {
+    public Hunt(Ghost owner) : base(owner) { }
+    public override void DoAction() {
+        throw new System.NotImplementedException();
+    }
+
+    public override void CheckDestination() {
+        throw new System.NotImplementedException();
     }
 
     public override void TryChangeState() {

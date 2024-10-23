@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     void OnMoveActionStarted(InputAction.CallbackContext obj) { 
         _moveActionStarted = true;
+        Debug.Log("Move");
     }
 
     void ApplyMove() {

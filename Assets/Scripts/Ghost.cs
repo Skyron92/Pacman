@@ -8,10 +8,12 @@ public class Ghost : MonoBehaviour
     State _currentState;
     
     public Transform startPointA, startPointB;
+    
+    [SerializeField, Range(1,5)] float waitDuration = 3.0f;
 
     void Awake() {
         _agent = GetComponent<NavMeshAgent>();
-        _currentState = new Wait(this);
+        _currentState = new Wait(this, waitDuration);
     }
 
     void Start() {
@@ -20,5 +22,9 @@ public class Ghost : MonoBehaviour
 
     void Update() {
         _currentState.CheckDestination();
+    }
+
+    public void ChangeState(State newState) {
+        _currentState = newState;
     }
 }
